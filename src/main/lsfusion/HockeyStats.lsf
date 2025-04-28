@@ -3,28 +3,30 @@ MODULE HockeyStats;
 REQUIRE System;
 
 
+// CLASSES
 CLASS Team 'Команда';
 
 name 'Название команды' = DATA STRING[30] (Team) IN base;
 
-FORM team 'Команда'
-    OBJECTS t = Team PANEL
-    PROPERTIES(t) name
 
-    EDIT Team OBJECT t
-;
+CLASS Player 'Игрок';
 
-FORM teams 'Команды'
-    OBJECTS t = Team
-    PROPERTIES(t) READONLY name
-    PROPERTIES(t) NEWSESSION NEW, EDIT, DELETE
+name 'Фамилия, Имя' = DATA STRING[50] (Player);
+number 'Номер' = DATA INTEGER (Player);
+role 'Амплуа' = DATA STRING[20] (Player) IN base;
+birthDate 'Дата рождения' = DATA DATE (Player);
+team = DATA Team (Player);
+teamName 'Команда' (Team) = name(team(Team));
 
-    LIST Team OBJECT t
-;
 
-NAVIGATOR {
-    NEW teams;
-}
+CLASS Goal 'Гол';
+
+game 'Игра' = DATA Game (Goal);
+minute 'Минута матча' = DATA INTEGER (Goal);
+team = DATA Team (Goal);
+player = DATA Player (Goal);
+playerName 'Игрок' (Player) = name(player(Player));
+playerTeam 'Команда' (Player) = teamName(player(Player));
 
 
 CLASS Game 'Игра';
@@ -41,14 +43,6 @@ hostGoals 'Х голы' = DATA INTEGER (Game);
 guestGoals 'Г голы' = DATA INTEGER (Game);
 
 CONSTRAINT hostGoals(Game game) = guestGoals(game) MESSAGE 'Игра не может закончиться вничью';
-
-winner(Game game) = IF hostGoals(game) > guestGoals(game)
-    THEN hostTeam(game)
-    ELSE guestTeam(game);
-
-looser(Game game) = IF hostGoals(game) > guestGoals(game)
-    THEN guestTeam(game)
-    ELSE hostTeam(game);
 
 
 CLASS GameResult 'Р/И' {
@@ -69,6 +63,88 @@ CONSTRAINT ((hostGoals(Game game) (-) guestGoals(game)) > 1 OR (hostGoals(game) 
 
 CONSTRAINT ((hostGoals(Game game) (-) guestGoals(game)) < 2 AND (hostGoals(game) (-) guestGoals(game)) > -2) AND NOT userResult(game)
     MESSAGE 'Укажите результат игры';
+
+
+// FORMS
+FORM team 'Команда'
+    OBJECTS t = Team PANEL
+    PROPERTIES(t) name
+
+    EDIT Team OBJECT t
+
+    OBJECTS p = Player
+    PROPERTIES(p) name, number, role, birthDate
+    FILTERS team(p) = t
+;
+
+FORM teams 'Команды'
+    OBJECTS t = Team
+    PROPERTIES(t) READONLY name
+    PROPERTIES(t) NEWSESSION NEW, EDIT, DELETE
+
+    LIST Team OBJECT t
+;
+
+FORM player 'Игрок'
+    OBJECTS p = Player PANEL
+    PROPERTIES(p) name, number, role, birthDate, teamName
+
+    EDIT Player OBJECT p
+;
+
+FORM players 'Игроки'
+    OBJECTS p = Player
+    PROPERTIES(p) READONLY name, number, role, birthDate, teamName
+    PROPERTIES(p) NEWSESSION NEW, EDIT, DELETE
+    ORDERS role(p)
+
+    LIST Player OBJECT p
+;
+
+goalsQuantity 'Количество голов' (Goal) = GROUP SUM 1 BY player(Goal g);
+
+FORM bombardiers 'Бомбардиры'
+    OBJECTS p = Player
+    PROPERTIES(p) name, teamName, goalsQuantity
+;
+
+FORM goal 'Гол'
+    OBJECTS g = Goal
+    PROPERTIES(g) game, minute, player
+
+    EDIT Goal OBJECT g
+;
+
+FORM goals 'Голы'
+    OBJECTS g = Goal
+    PROPERTIES(g) READONLY game, minute, playerName, playerTeam
+    PROPERTIES(g) NEWSESSION NEW, EDIT, DELETE
+
+    LIST Goal OBJECT g
+;
+
+FORM game 'Игра'
+    OBJECTS g = Game
+    PROPERTIES(g) date, hostTeam, guestTeam, hostGoals, guestGoals
+
+    EDIT Game OBJECT g
+;
+
+FORM games 'Игры'
+    OBJECTS g = Game
+    PROPERTIES(g) READONLY date, hostTeamName, hostGoals, guestGoals, guestTeamName, resultName
+    PROPERTIES(g) NEWSESSION NEW, EDIT, DELETE
+
+    LIST Game OBJECT g
+;
+
+winner(Game game) = IF hostGoals(game) > guestGoals(game)
+    THEN hostTeam(game)
+    ELSE guestTeam(game);
+
+looser(Game game) = IF hostGoals(game) > guestGoals(game)
+    THEN guestTeam(game)
+    ELSE hostTeam(game);
 
 hostGamesPlayed = GROUP SUM 1 BY hostTeam(Game game);
 guestGamesPlayed = GROUP SUM 1 BY guestTeam(Game game);
@@ -101,17 +177,35 @@ goalsConceded 'Кол-во пропущенных голов' (Team team) = OVER
 place 'Место' (Team team) = PARTITION SUM 1 ORDER DESC points(team), gamesWon(team), gamesWonOT(team), gamesWonSO(team),
     (OVERRIDE goalsScored(team) (-) goalsConceded(team), 0), goalsScored(team);
 
-
 FORM scoreTable 'Турнирная таблица'
     OBJECTS game = Game
-    PROPERTIES(game) date, hostTeamName, hostGoals, guestGoals, guestTeamName, resultName, NEW, DELETE
+    PROPERTIES(game) READONLY date, hostTeamName, hostGoals, guestGoals, guestTeamName, resultName
+    PROPERTIES(game) NEWSESSION EDIT
 
     OBJECTS team = Team
     PROPERTIES(team) place, name, gamesPlayed, gamesWon, gamesWonOT, gamesWonSO,
-        gamesLostSO, gamesLostOT, gamesLost, goalsScored, goalsConceded, points, NEW, DELETE
+        gamesLostSO, gamesLostOT, gamesLost, goalsScored, goalsConceded, points
     ORDERS place(team)
 ;
 
+
+// DESIGNS
+
+
+// NAVIGATOR
 NAVIGATOR {
-    NEW scoreTable;
+    NEW FOLDER teamsCat 'Команды' WINDOW toolbar {
+        NEW teams;
+    }
+    teamsCat {
+        NEW players AFTER teams;
+    }
+    NEW FOLDER scoreTableCat 'Турнирная таблица' WINDOW toolbar {
+        NEW scoreTable;
+    }
+    scoreTableCat {
+        NEW bombardiers AFTER scoreTable;
+        NEW game;
+        NEW goals;
+    }
 }
