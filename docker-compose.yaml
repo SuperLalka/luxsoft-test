@@ -2,12 +2,12 @@ name: lsfusion
 
 volumes:
   lx_postgres_data: {}
-  lx_server_data: {}
-  lx_client_data: {}
 
 services:
   db:
-    image: postgres:latest
+    build:
+      context: .
+      dockerfile: ./compose/db/Dockerfile
     container_name: lx_postgres
     volumes:
       - lx_postgres_data:/var/lib/postgresql/data
@@ -23,8 +23,6 @@ services:
     container_name: lx_server
     depends_on:
       - db
-    volumes:
-      - lx_server_data:/lsfusion
     env_file:
       - ./.envs_example/server
 
@@ -33,8 +31,6 @@ services:
     container_name: lx_client
     depends_on:
       - server
-    volumes:
-      - lx_client_data:/usr/local/tomcat/conf/Catalina
     ports:
       - "8080:8080"
     env_file:

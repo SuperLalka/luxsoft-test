@@ -54,10 +54,14 @@
 
 ### Installation
 
-Для запуска проекта достаточно собрать и запустить контейнеры Docker.
-
+Для запуска проекта необходимо собрать и запустить контейнеры Docker.
 ```sh
 docker-compose -f docker-compose.yml up -d --build
+```
+
+Установить дамп в БД (не работает).
+```sh
+docker exec -i lx_postgres psql luxsoft_db debug < ./compose/db/dump.sql
 ```
 
 ### Documentation
