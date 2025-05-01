@@ -5,11 +5,13 @@ REQUIRE System, Time;
 
 // CLASSES
 CLASS Team 'Команда';
+TABLE team (Team);
 
 name 'Название команды' = DATA STRING[30] (Team) IN base;
 
 
 CLASS Player 'Игрок';
+TABLE player (Player);
 
 name 'Фамилия, Имя' = DATA STRING[50] (Player);
 number 'Номер' = DATA INTEGER (Player);
@@ -25,18 +27,43 @@ CONSTRAINT birthDate(Player p) > currentDate() MESSAGE 'Дата рождени�
 
 
 CLASS Game 'Игра';
+TABLE game (Game);
 
 date 'Дата' = DATA DATE (Game);
 hostTeam = DATA Team (Game);
 guestTeam = DATA Team (Game);
-hostGoals 'Х голы' = DATA INTEGER (Game);
-guestGoals 'Г голы' = DATA INTEGER (Game);
 
 gameName 'Игра' (Game g) = date(g) + ' | ' + name(hostTeam(g)) + ' - ' + name(guestTeam(g));
 hostTeamName 'Хозяева' (Game g) = name(hostTeam(g));
 guestTeamName 'Гости' (Game g) = name(guestTeam(g));
 
 CONSTRAINT hostTeam(Game g) = guestTeam(g) CHECKED BY hostTeam, guestTeam MESSAGE 'Хозяйская и гостевая команды должны быть разными';
+
+
+CLASS Goal 'Гол';
+TABLE goal (Goal);
+
+game = DATA Game (Goal);
+minute 'Минута матча' = DATA INTEGER (Goal);
+team = DATA Team (Goal);
+player = DATA Player (Goal);
+
+gameName 'Игра' (Goal g) = gameName(game(g));
+playerName 'Игрок' (Goal g) = name(player(g));
+playerTeam (Goal g) = team(player(g));
+playerTeamName 'Команда' (Goal g) = teamName(player(g));
+
+CONSTRAINT minute(Goal g) < 0 MESSAGE 'Значение минуты не может быть отрицательным';
+
+CONSTRAINT player(Goal g) AND NOT playerTeam(g) == hostTeam(game(g)) AND NOT playerTeam(g) == guestTeam(game(g))
+    MESSAGE 'Игрок должен относится к команде которая участвует в матче';
+
+CONSTRAINT team(Goal g) AND NOT team(g) == hostTeam(game(g)) AND NOT team(g) == guestTeam(game(g))
+    MESSAGE 'Команда должна участвовать в матче';
+
+
+hostGoals 'Х голы' (Game g) = GROUP SUM 1 IF game(Goal goal) = g AND team(goal) = hostTeam(g);
+guestGoals 'Г голы' (Game g) = GROUP SUM 1 IF game(Goal goal) = g AND team(goal) = guestTeam(g);
 
 CONSTRAINT hostGoals(Game g) = guestGoals(g) MESSAGE 'Игра не может закончиться вничью';
 
@@ -46,6 +73,8 @@ CLASS GameResult 'Р/И' {
     winOT 'ПО',
     winSO 'ПБ'
 }
+TABLE gameresult (GameResult);
+TABLE team_gameresult (Team, GameResult);
 
 userResult = DATA GameResult (Game);
 
@@ -59,27 +88,6 @@ CONSTRAINT ((hostGoals(Game game) (-) guestGoals(game)) > 1 OR (hostGoals(game) 
 
 CONSTRAINT ((hostGoals(Game game) (-) guestGoals(game)) < 2 AND (hostGoals(game) (-) guestGoals(game)) > -2) AND NOT userResult(game)
     MESSAGE 'Укажите результат игры';
-
-
-CLASS Goal 'Гол';
-
-game = DATA Game (Goal);
-minute 'Минута матча' = DATA INTEGER (Goal);
-team = DATA Team (Goal);
-player = DATA Player (Goal);
-
-gameName 'Игра' (Goal g) = gameName(game(g));
-playerName 'Игрок' (Player) = name(player(Player));
-playerTeam (Player) = team(player(Player));
-playerTeamName 'Команда' (Player) = teamName(player(Player));
-
-CONSTRAINT minute(Goal g) < 0 MESSAGE 'Значение минуты не может быть отрицательным';
-
-CONSTRAINT player(Goal g) AND NOT playerTeam(g) == hostTeam(game(g)) AND NOT playerTeam(g) == guestTeam(game(g))
-    MESSAGE 'Игрок должен относится к команде которая участвует в матче';
-
-CONSTRAINT team(Goal g) AND NOT team(g) == hostTeam(game(g)) AND NOT team(g) == guestTeam(game(g))
-    MESSAGE 'Команда должна участвовать в матче';
 
 
 // FORMS
@@ -121,10 +129,8 @@ FORM players 'Игроки'
 
 fillTeam (Goal g)  {
     INPUT p = Player DO {
-        NEW d = Goal {
-            team(g) <- team(p);
-            player(g) <- p;
-        }
+        team(g) <- team(p);
+        player(g) <- p;
     }
 }
 

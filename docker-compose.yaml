@@ -5,9 +5,7 @@ volumes:
 
 services:
   db:
-    build:
-      context: .
-      dockerfile: ./compose/db/Dockerfile
+    image: postgres:17.4
     container_name: lx_postgres
     volumes:
       - lx_postgres_data:/var/lib/postgresql/data
@@ -23,6 +21,8 @@ services:
     container_name: lx_server
     depends_on:
       - db
+    volumes:
+      - ./backups:/backups
     env_file:
       - ./.envs_example/server
 

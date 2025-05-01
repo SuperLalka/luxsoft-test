@@ -59,10 +59,10 @@
 docker-compose -f docker-compose.yml up -d --build
 ```
 
-Установить дамп в БД (не работает).
-```sh
-docker exec -i lx_postgres psql luxsoft_db debug < ./compose/db/dump.sql
-```
+Установить дамп в БД.
+
+> Устанавливается с помощью модуля Dumps (вкладка "Заполнение" в навигации).
+
 
 ### Documentation
 
