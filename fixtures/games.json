@@ -1,0 +1,56 @@
+[
+  {
+    "date": "2024-11-25",
+    "hostTeamName": "Washington Capitals",
+    "guestTeamName": "New Jersey Devils",
+    "userResult": "П"
+  },
+  {
+    "date": "2024-12-12",
+    "hostTeamName": "Columbus Jackets",
+    "guestTeamName": "Detroit Red Wings",
+    "userResult": "ПБ"
+  },
+  {
+    "date": "2023-11-20",
+    "hostTeamName": "Carolina Hurricanes",
+    "guestTeamName": "Tampa Bay Lightning",
+    "userResult": "П"
+  },
+  {
+    "date": "2024-06-21",
+    "hostTeamName": "New Jersey Devils",
+    "guestTeamName": "Columbus Jackets",
+    "userResult": "П"
+  },
+  {
+    "date": "2023-01-07",
+    "hostTeamName": "Detroit Red Wings",
+    "guestTeamName": "Washington Capitals",
+    "userResult": "ПО"
+  },
+  {
+    "date": "2024-12-16",
+    "hostTeamName": "Tampa Bay Lightning",
+    "guestTeamName": "Washington Capitals",
+    "userResult": "ПБ"
+  },
+  {
+    "date": "2024-10-13",
+    "hostTeamName": "Columbus Jackets",
+    "guestTeamName": "New Jersey Devils",
+    "userResult": "П"
+  },
+  {
+    "date": "2024-04-04",
+    "hostTeamName": "Tampa Bay Lightning",
+    "guestTeamName": "Detroit Red Wings",
+    "userResult": "П"
+  },
+  {
+    "date": "2024-12-02",
+    "hostTeamName": "Washington Capitals",
+    "guestTeamName": "Carolina Hurricanes",
+    "userResult": "ПО"
+  }
+]

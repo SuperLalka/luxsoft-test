@@ -1,0 +1,373 @@
+[
+  {
+    "name": "Тревор ван Римсдайк",
+    "birthDate": "1991-07-24",
+    "role": "защитник",
+    "number": 57,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Райан Леонард",
+    "birthDate": "2005-01-21",
+    "role": "нападающий",
+    "number": 9,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Александр Михайлович Овечкин",
+    "birthDate": "1985-09-17",
+    "role": "нападающий",
+    "number": 8,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Чарли Линдгрен",
+    "birthDate": "1993-12-18",
+    "role": "вратарь",
+    "number": 79,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Александр Александрович Алексеев",
+    "birthDate": "1999-11-15",
+    "role": "защитник",
+    "number": 27,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Расмус Сандин",
+    "birthDate": "2000-03-07",
+    "role": "защитник",
+    "number": 38,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Ник Дауд",
+    "birthDate": "1990-05-27",
+    "role": "нападающий",
+    "number": 26,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Алексей Владимирович Протас",
+    "birthDate": "2001-01-06",
+    "role": "нападающий",
+    "number": 21,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Эндрю Манджапане",
+    "birthDate": "1996-04-04",
+    "role": "нападающий",
+    "number": 88,
+    "teamName": "Washington Capitals"
+  },
+  {
+    "name": "Райан Макдона",
+    "birthDate": "1989-06-13",
+    "role": "защитник",
+    "number": 27,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Оливер Бьёркстранд",
+    "birthDate": "1995-04-10",
+    "role": "нападающий",
+    "number": 22,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Деклэн Карлайл",
+    "birthDate": "2000-05-18",
+    "role": "защитник",
+    "number": 72,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Брейден Пойнт",
+    "birthDate": "1996-03-13",
+    "role": "нападающий",
+    "number": 21,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Андрей Андреевич Василевский",
+    "birthDate": "1994-07-25",
+    "role": "вратарь",
+    "number": 88,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Стивен Сантини",
+    "birthDate": "1995-03-07",
+    "role": "защитник",
+    "number": 64,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Митчелл Чаффи",
+    "birthDate": "1998-01-26",
+    "role": "нападающий",
+    "number": 41,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Люк Гленденинг",
+    "birthDate": "1989-04-28",
+    "role": "нападающий",
+    "number": 11,
+    "teamName": "Tampa Bay Lightning"
+  },
+  {
+    "name": "Станислав Свозил",
+    "birthDate": "2003-01-17",
+    "role": "защитник",
+    "number": 5,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Джет Гривз",
+    "birthDate": "2001-03-30",
+    "role": "вратарь",
+    "number": 73,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Джордан Харрис",
+    "birthDate": "2000-07-07",
+    "role": "защитник",
+    "number": 22,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Дмитрий Сергеевич Воронков",
+    "birthDate": "2000-09-10",
+    "role": "нападающий",
+    "number": 10,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Дилан Гэмбрелл",
+    "birthDate": "1996-08-26",
+    "role": "нападающий",
+    "number": 18,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Лука Дель Бель Беллуз",
+    "birthDate": "2003-11-10",
+    "role": "нападающий",
+    "number": 10,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Джейк Кристиансен",
+    "birthDate": "1999-09-12",
+    "role": "защитник",
+    "number": 2,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Даниил Вадимович Тарасов",
+    "birthDate": "1999-03-27",
+    "role": "вратарь",
+    "number": 40,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Зак Веренски",
+    "birthDate": "1997-07-19",
+    "role": "защитник",
+    "number": 8,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Люк Канин",
+    "birthDate": "1997-12-04",
+    "role": "нападающий",
+    "number": 11,
+    "teamName": "Columbus Jackets"
+  },
+  {
+    "name": "Джейк Аллен",
+    "birthDate": "1990-08-07",
+    "role": "вратарь",
+    "number": 34,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Топиас Вилен",
+    "birthDate": "2004-04-01",
+    "role": "защитник",
+    "number": 38,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Адам Бекман",
+    "birthDate": "2001-05-10",
+    "role": "нападающий",
+    "number": 12,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Пол Коттер",
+    "birthDate": "1999-11-16",
+    "role": "нападающий",
+    "number": 47,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Стефан Ноэсен",
+    "birthDate": "1993-02-12",
+    "role": "нападающий",
+    "number": 11,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Колтон Уайт",
+    "birthDate": "1997-05-03",
+    "role": "защитник",
+    "number": 45,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Йонас Зигенталер",
+    "birthDate": "1997-05-06",
+    "role": "защитник",
+    "number": 71,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Натан Бастиан",
+    "birthDate": "1997-12-06",
+    "role": "нападающий",
+    "number": 14,
+    "teamName": "New Jersey Devils"
+  },
+  {
+    "name": "Джек Кэмпбелл",
+    "birthDate": "1992-01-09",
+    "role": "вратарь",
+    "number": 32,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Мориц Зайдер",
+    "birthDate": "2001-04-06",
+    "role": "защитник",
+    "number": 53,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Картер Мазур",
+    "birthDate": "2002-03-28",
+    "role": "нападающий",
+    "number": 43,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Эрик Густафссон",
+    "birthDate": "1992-03-14",
+    "role": "защитник",
+    "number": 56,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Джей Ти Комфер",
+    "birthDate": "1995-04-08",
+    "role": "нападающий",
+    "number": 37,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Дилан Ларкин",
+    "birthDate": "1996-07-30",
+    "role": "нападающий",
+    "number": 71,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Джастин Холл",
+    "birthDate": "1992-01-30",
+    "role": "защитник",
+    "number": 3,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Эндрю Копп",
+    "birthDate": "1994-07-08",
+    "role": "нападающий",
+    "number": 18,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Кэм Тальбо",
+    "birthDate": "1987-07-05",
+    "role": "вратарь",
+    "number": 39,
+    "teamName": "Detroit Red Wings"
+  },
+  {
+    "name": "Тайсон Джост",
+    "birthDate": "1998-03-14",
+    "role": "нападающий",
+    "number": 27,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Сет Джарвис",
+    "birthDate": "2002-02-01",
+    "role": "нападающий",
+    "number": 24,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Брент Бёрнс",
+    "birthDate": "1985-03-09",
+    "role": "защитник",
+    "number": 8,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Чарльз-Алексис Лего",
+    "birthDate": "2003-09-05",
+    "role": "защитник",
+    "number": 5,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Скайлер Бриндамор",
+    "birthDate": "1999-07-27",
+    "role": "нападающий",
+    "number": 76,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Джордан Мартинук",
+    "birthDate": "1992-07-25",
+    "role": "нападающий",
+    "number": 48,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Джексон Блейк",
+    "birthDate": "2003-08-03",
+    "role": "нападающий",
+    "number": 53,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Пётр Анатольевич Кочетков",
+    "birthDate": "2009-06-25",
+    "role": "вратарь",
+    "number": 52,
+    "teamName": "Carolina Hurricanes"
+  },
+  {
+    "name": "Тай Смит",
+    "birthDate": "2000-03-24",
+    "role": "защитник",
+    "number": 42,
+    "teamName": "Carolina Hurricanes"
+  }
+]

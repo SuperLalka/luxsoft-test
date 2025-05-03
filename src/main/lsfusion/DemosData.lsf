@@ -1,0 +1,143 @@
+MODULE DemosData;
+
+REQUIRE System, Utils, HockeyStats;
+
+backupTeamsPath = '/fixtures/teams.json';
+backupPlayersPath = '/fixtures/players.json';
+backupGamesPath = '/fixtures/games.json';
+backupGoalsPath = '/fixtures/goals.json';
+
+createTeams () {
+    NEWSESSION {
+        LOCAL importFile = FILE ();
+
+        READ backupTeamsPath() TO importFile;
+
+        LOCAL name = BPSTRING[30] (INTEGER);
+
+        IMPORT JSON FROM importFile() TO name;
+
+        FOR imported(INTEGER i) NEW t = Team DO {
+            name(t) <- name(i);
+        }
+        APPLY;
+    }
+}
+
+createPlayers () {
+    NEWSESSION {
+        LOCAL importFile = FILE ();
+
+        READ backupPlayersPath() TO importFile;
+
+        LOCAL name = BPSTRING[50] (INTEGER);
+        LOCAL birthDate = DATE (INTEGER);
+        LOCAL role = BPSTRING[20] (INTEGER);
+        LOCAL number = INTEGER (INTEGER);
+        LOCAL teamName = BPSTRING[30] (INTEGER);
+
+        IMPORT JSON FROM importFile() TO name, birthDate, role, number, teamName;
+
+        FOR imported(INTEGER i) NEW p = Player DO {
+            name(p) <- name(i);
+            number(p) <- number(i);
+            role(p) <- role(i);
+            birthDate(p) <- birthDate(i);
+            team(p) <- GROUP MAX Team t IF name(t) = teamName(i);
+        }
+        APPLY;
+    }
+}
+
+createGames () {
+    NEWSESSION {
+        LOCAL importFile = FILE ();
+
+        READ backupGamesPath() TO importFile;
+
+        LOCAL date = DATE (INTEGER);
+        LOCAL hostTeamName = BPSTRING[30] (INTEGER);
+        LOCAL guestTeamName = BPSTRING[30] (INTEGER);
+        LOCAL userResult = BPSTRING[10] (INTEGER);
+
+        IMPORT JSON FROM importFile() TO date, hostTeamName, guestTeamName, userResult;
+
+        FOR imported(INTEGER i) NEW g = Game DO {
+            date(g) <- date(i);
+            hostTeam(g) <- GROUP MAX Team t IF name(t) = hostTeamName(i);
+            guestTeam(g) <- GROUP MAX Team t IF name(t) = guestTeamName(i);
+            userResult(g) <- GROUP MAX GameResult gr IF staticCaption(gr) == userResult(i);
+        }
+        APPLY;
+    }
+}
+
+createGoals () {
+    NEWSESSION {
+        LOCAL importFile = FILE ();
+
+        READ backupGoalsPath() TO importFile;
+
+        LOCAL game = TEXT (INTEGER);
+        LOCAL minute = INTEGER (INTEGER);
+        LOCAL teamName = BPSTRING[30] (INTEGER);
+        LOCAL playerName = BPSTRING[50] (INTEGER);
+
+        IMPORT JSON FROM importFile() TO game, minute, teamName, playerName;
+
+        FOR imported(INTEGER i) NEW g = Goal DO {
+            game(g) <- GROUP MAX Game gm IF gameName(gm) = game(i);
+            minute(g) <- minute(i);
+            team(g) <- GROUP MAX Team t IF name(t) = teamName(i);
+            player(g) <- GROUP MAX Player p IF name(p) = playerName(i);
+        }
+        APPLY;
+    }
+}
+
+fillDB() {
+    createTeams();
+    createPlayers();
+    createGames();
+    createGoals();
+}
+
+lastTeamName 'Название последней команды' () = GROUP MAX name(Team t);
+
+checkDBBeforeFilling 'Загрузить демо-объекты' () {
+    ASK 'Это действие установит все необходимые для демонстрационного состояния приложения данные в БД.
+     Перед началом будет произведена проверка что база пуста. Продолжить?' DO {
+        IF lastTeamName() THEN
+            MESSAGE 'База данных не пуста. Используйте очистку';
+        ELSE
+            fillDB();
+        MESSAGE 'Демонстрационные данные установлены';
+    }
+}
+
+dropBD 'Очистить базу' {
+    ASK 'Это действие удалит все объекты из БД. Продолжить?' DO {
+        FOR Team t IS Team DO {
+            DELETE t;
+        }
+        FOR Player p IS Player DO {
+            DELETE p;
+        }
+        FOR Game gm IS Game DO {
+            DELETE gm;
+        }
+        FOR Goal gl IS Goal DO {
+            DELETE gl;
+        }
+        APPLY;
+        MESSAGE 'База данных очищена';
+    };
+}
+
+// NAVIGATOR
+NAVIGATOR {
+    NEW FOLDER teamsCat 'Заполнить демо-БД' WINDOW toolbar IMAGE 'bi-database-fill-add' {
+        NEW ACTION checkDBBeforeFilling IMAGE 'bi-database-fill-up';
+        NEW ACTION dropBD IMAGE 'bi-database-fill-x';
+    }
+}

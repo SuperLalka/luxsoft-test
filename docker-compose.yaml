@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backups:/backups
+      - ./fixtures:/fixtures
     env_file:
       - ./.envs_example/server
 
