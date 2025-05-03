@@ -52,5 +52,17 @@
     "hostTeamName": "Washington Capitals",
     "guestTeamName": "Carolina Hurricanes",
     "userResult": "ПО"
+  },
+  {
+    "date": "2024-12-04",
+    "hostTeamName": "New Jersey Devils",
+    "guestTeamName": "Washington Capitals",
+    "userResult": "П"
+  },
+  {
+    "date": "2024-12-18",
+    "hostTeamName": "Tampa Bay Lightning",
+    "guestTeamName": "Carolina Hurricanes",
+    "userResult": "ПО"
   }
 ]

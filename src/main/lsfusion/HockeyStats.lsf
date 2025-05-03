@@ -26,6 +26,10 @@ CONSTRAINT number(Player p) < 0 MESSAGE 'Значение номера не мо
 CONSTRAINT birthDate(Player p) > currentDate() MESSAGE 'Дата рождения должна быть в прошлом';
 
 
+CLASS PlayerTransfer 'Трансферы игроков';
+TABLE player_transfer (PlayerTransfer);
+
+
 CLASS Game 'Игра';
 TABLE game (Game);
 
@@ -97,7 +101,7 @@ FORM team 'Команда'
 
     EDIT Team OBJECT t
 
-    OBJECTS p = Player
+    OBJECTS p 'Игроки команды' = Player
     PROPERTIES(p) name, number, role, birthDate, NEW, DELETE
     FILTERS team(p) = t
     ORDERS role(p)
@@ -149,30 +153,62 @@ FORM goals 'Голы'
     LIST Goal OBJECT g
 ;
 
+homeWinner(Game game) = hostGoals(game) > guestGoals(game);
+guestWinner(Game game) = hostGoals(game) < guestGoals(game);
+
+isHomeTeam(Game game, Team team) =  hostTeam(game) == team;
+isGuestTeam(Game game, Team team) =  guestTeam(game) == team;
+
+gamesWonBetweenTeamsBy(Team t1, Team t2, Game g) = (GROUP SUM 1 IF isHomeTeam(g, t1) AND isGuestTeam(g, t2) AND homeWinner(g))
+        (+) (GROUP SUM 1 IF isHomeTeam(g, t2) AND isGuestTeam(g, t1) AND guestWinner(g));
+
+hostTeamWon 'Победы' (Game g) = OVERRIDE gamesWonBetweenTeamsBy(hostTeam(g), guestTeam(g), g), 0;
+guestTeamWon 'Победы' (Game g) = OVERRIDE gamesWonBetweenTeamsBy(guestTeam(g), hostTeam(g), g), 0;
+gamesBetweenTeams 'Всего игр' (Game g)  = hostTeamWon(g) + guestTeamWon(g);
+
+goalsScoredBetweenTeamsBy (Team t1, Team t2, Game g) = (GROUP SUM hostGoals(g) IF isHomeTeam(g, t1) AND isGuestTeam(g, t2))
+        (+) (GROUP SUM guestGoals(g) IF isGuestTeam(g, t1) AND isHomeTeam(g, t2));
+
+gameGoalsScored (Team t1, Team t2, Game g) = goalsScoredBetweenTeamsBy(t1, t2, g);
+
+hostTeamGoals 'Забито голов' (Game g) = OVERRIDE gameGoalsScored(hostTeam(g), guestTeam(g), g), 0;
+guestTeamGoals 'Забито голов' (Game g) = OVERRIDE gameGoalsScored(guestTeam(g), hostTeam(g), g), 0;
+
 FORM game 'Игра'
     OBJECTS gm = Game PANEL
     PROPERTIES(gm) date, hostTeamName, guestTeamName, hostGoals, guestGoals
 
     EDIT Game OBJECT gm
 
-    OBJECTS gl = Goal
+    OBJECTS gl 'Голы матча' = Goal
     PROPERTIES(gl) READONLY gameName, minute, playerName, playerTeamName, NEW, DELETE
     FILTERS game(gl) = gm
+
+    OBJECTS gm2 'Статистика личных встреч' = Game
+    PROPERTIES(gm2) READONLY hostTeamName, hostTeamGoals, hostTeamWon, gamesBetweenTeams, guestTeamWon, guestTeamGoals, guestTeamName
+    FILTERS isHomeTeam(gm2, hostTeam(gm)) AND isGuestTeam(gm2, guestTeam(gm))
+        OR isHomeTeam(gm2, guestTeam(gm)) AND isGuestTeam(gm2, hostTeam(gm))
+
+    OBJECTS gm3 'История личных встреч' = Game
+    PROPERTIES(gm3) READONLY date, hostTeamName, guestTeamName, hostGoals, guestGoals
+    FILTERS isHomeTeam(gm3, hostTeam(gm)) AND isGuestTeam(gm3, guestTeam(gm))
+        OR isHomeTeam(gm3, guestTeam(gm)) AND isGuestTeam(gm3, hostTeam(gm))
+    ORDERS date(gm3)
 ;
 
 FORM games 'Игры'
     OBJECTS g = Game
     PROPERTIES(g) READONLY date, hostTeamName, hostGoals, guestTeamName, guestGoals, resultName
     PROPERTIES(g) NEWSESSION NEW, EDIT, DELETE
+    ORDERS date(g)
 
     LIST Game OBJECT g
 ;
 
-winner(Game game) = IF hostGoals(game) > guestGoals(game)
+gameWinnerTeam(Game game) = IF hostGoals(game) > guestGoals(game)
     THEN hostTeam(game)
     ELSE guestTeam(game);
-
-looser(Game game) = IF hostGoals(game) > guestGoals(game)
+gameLooserTeam(Game game) = IF hostGoals(game) > guestGoals(game)
     THEN guestTeam(game)
     ELSE hostTeam(game);
 
@@ -180,14 +216,14 @@ hostGamesPlayed = GROUP SUM 1 BY hostTeam(Game game);
 guestGamesPlayed = GROUP SUM 1 BY guestTeam(Game game);
 gamesPlayed 'И' (Team team) = hostGamesPlayed(team) (+) guestGamesPlayed(team);
 
-gamesWonBy(Team team, GameResult type) = OVERRIDE [GROUP SUM 1 BY winner(Game game), result(game)](team, type),
+gamesWonBy(Team team, GameResult type) = OVERRIDE [GROUP SUM 1 BY gameWinnerTeam(Game game), result(game)](team, type),
     0 IF team IS Team AND type IS GameResult MATERIALIZED;
 
 gamesWon 'В' (Team team) = gamesWonBy(team, GameResult.win);
 gamesWonOT 'ВО' (Team team) = gamesWonBy(team, GameResult.winOT);
 gamesWonSO 'ВБ' (Team team) = gamesWonBy(team, GameResult.winSO);
 
-gamesLostBy(Team team, GameResult type) = OVERRIDE [GROUP SUM 1 BY looser(Game game), result(game)](team, type),
+gamesLostBy(Team team, GameResult type) = OVERRIDE [GROUP SUM 1 BY gameLooserTeam(Game game), result(game)](team, type),
     0 IF team IS Team AND type IS GameResult MATERIALIZED;
 
 gamesLost 'П' (Team team) = gamesLostBy(team, GameResult.win);
@@ -215,7 +251,7 @@ FORM scoreTable 'Турнирная таблица'
         gamesLostSO, gamesLostOT, gamesLost, goalsScored, goalsConceded, points
     ORDERS place(t)
 
-    OBJECTS p = Player
+    OBJECTS p 'Таблица бомбардиров' = Player
     PROPERTIES(p) READONLY name, teamName, playerGoalsQuantity
     FILTERS playerGoalsQuantity(p) > 0
     ORDERS playerGoalsQuantity(p) DESC

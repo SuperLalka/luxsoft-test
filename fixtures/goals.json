@@ -118,5 +118,29 @@
     "minute": 29,
     "teamName": "Washington Capitals",
     "playerName": "Ник Дауд"
+  },
+  {
+    "game": "2024-12-04 | New Jersey Devils - Washington Capitals",
+    "minute": 5,
+    "teamName": "New Jersey Devils",
+    "playerName": "Стефан Ноэсен"
+  },
+  {
+    "game": "2024-12-04 | New Jersey Devils - Washington Capitals",
+    "minute": 17,
+    "teamName": "Washington Capitals",
+    "playerName": "Райан Леонард"
+  },
+  {
+    "game": "2024-12-04 | New Jersey Devils - Washington Capitals",
+    "minute": 32,
+    "teamName": "Washington Capitals",
+    "playerName": "Александр Михайлович Овечкин"
+  },
+  {
+    "game": "2024-12-18 | Tampa Bay Lightning - Carolina Hurricanes",
+    "minute": 65,
+    "teamName": "Tampa Bay Lightning",
+    "playerName": "Брейден Пойнт"
   }
 ]
