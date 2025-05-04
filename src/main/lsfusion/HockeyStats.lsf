@@ -49,8 +49,8 @@ TABLE goal (Goal);
 
 game = DATA Game (Goal);
 minute 'Минута матча' = DATA INTEGER (Goal);
-team = DATA Team (Goal);
-player = DATA Player (Goal);
+team 'Команда' = DATA Team (Goal);
+player 'Игрок' = DATA Player (Goal);
 
 gameName 'Игра' (Goal g) = gameName(game(g));
 playerName 'Игрок' (Goal g) = name(player(g));
@@ -64,6 +64,8 @@ CONSTRAINT player(Goal g) AND NOT playerTeam(g) == hostTeam(game(g)) AND NOT pla
 
 CONSTRAINT team(Goal g) AND NOT team(g) == hostTeam(game(g)) AND NOT team(g) == guestTeam(game(g))
     MESSAGE 'Команда должна участвовать в матче';
+
+//WHEN CHANGED(player(Goal g)) DO team(g) <- team(player(g));
 
 
 hostGoals 'Х голы' (Game g) = OVERRIDE (GROUP SUM 1 IF game(Goal goal) = g AND team(goal) = hostTeam(g)), 0;
@@ -131,19 +133,16 @@ FORM players 'Игроки'
     LIST Player OBJECT p
 ;
 
-fillTeam (Goal g)  {
-    INPUT p = Player DO {
-        team(g) <- team(p);
-        player(g) <- p;
-    }
-}
-
 FORM goal 'Гол'
     OBJECTS g = Goal PANEL
-    PROPERTIES(g) gameName, minute, player ON CHANGE fillTeam(g), team
+    PROPERTIES(g) gameName, minute, player, team
 
     EDIT Goal OBJECT g
 ;
+
+WHEN LOCAL FORMS goal CHANGED(player(Goal g)) DO {
+    team(g) <- team(player(g));
+}
 
 FORM goals 'Голы'
     OBJECTS g = Goal
@@ -181,7 +180,7 @@ FORM game 'Игра'
     EDIT Game OBJECT gm
 
     OBJECTS gl 'Голы матча' = Goal
-    PROPERTIES(gl) READONLY gameName, minute, playerName, playerTeamName, NEW, DELETE
+    PROPERTIES(gl) gameName READONLY, minute, player, playerName DISABLE, team, playerTeamName DISABLE, NEW, DELETE
     FILTERS game(gl) = gm
 
     OBJECTS gm2 'Статистика личных встреч' = Game
@@ -190,11 +189,15 @@ FORM game 'Игра'
         OR isHomeTeam(gm2, guestTeam(gm)) AND isGuestTeam(gm2, hostTeam(gm))
 
     OBJECTS gm3 'История личных встреч' = Game
-    PROPERTIES(gm3) READONLY date, hostTeamName, guestTeamName, hostGoals, guestGoals
+    PROPERTIES(gm3) READONLY date, hostTeamName, hostGoals, guestGoals, guestTeamName
     FILTERS isHomeTeam(gm3, hostTeam(gm)) AND isGuestTeam(gm3, guestTeam(gm))
         OR isHomeTeam(gm3, guestTeam(gm)) AND isGuestTeam(gm3, hostTeam(gm))
     ORDERS date(gm3)
 ;
+
+WHEN LOCAL FORMS game CHANGED(player(Goal gl)) DO {
+    team(gl) <- team(player(gl));
+}
 
 FORM games 'Игры'
     OBJECTS g = Game
