@@ -158,8 +158,8 @@ guestWinner(Game game) = hostGoals(game) < guestGoals(game);
 isHomeTeam(Game game, Team team) =  hostTeam(game) == team;
 isGuestTeam(Game game, Team team) =  guestTeam(game) == team;
 
-gamesWonBetweenTeamsBy(Team t1, Team t2, Game g) = (GROUP SUM 1 IF isHomeTeam(g, t1) AND isGuestTeam(g, t2) AND homeWinner(g))
-        (+) (GROUP SUM 1 IF isHomeTeam(g, t2) AND isGuestTeam(g, t1) AND guestWinner(g));
+gamesWonBetweenTeamsBy(Team t1, Team t2, Game g) = (1 IF isHomeTeam(g, t1) AND isGuestTeam(g, t2) AND homeWinner(g))
+    (+) (1 IF isHomeTeam(g, t2) AND isGuestTeam(g, t1) AND guestWinner(g));
 
 hostTeamWon 'Победы' (Game g) = OVERRIDE gamesWonBetweenTeamsBy(hostTeam(g), guestTeam(g), g), 0;
 guestTeamWon 'Победы' (Game g) = OVERRIDE gamesWonBetweenTeamsBy(guestTeam(g), hostTeam(g), g), 0;
